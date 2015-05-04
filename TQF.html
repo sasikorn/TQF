@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type">
+  <title></title>
+  <link href="css/site.css" rel="stylesheet">
+  <!-- <link href="css/scrollingtable.css" rel="stylesheet"> -->
+  <script src="scr/jquery-1.11.2.min.js"></script>
+  <!--<script src="jquery.sticky.min.js"></script>-->
+  <script src="scr/floatThead-master/dist/jquery.floatThead.min.js"></script>
+  <script src="scr/main.js" language="javascript"></script>
+  <!--<script src="file.js" language="javascript"></script> -->
+  <script src="scr/s01xUtility.js" language="javascript"></script>
+  <script src="scr/s02xLearningOutcome.js" language="javascript"></script>
+  <script src="scr/s03xCategory.js" language="javascript"></script>
+  <script src="scr/s04xHomework.js" language="javascript"></script>
+  	<script type="text/javascript">
+		$(document).ready(function(){
+			//$("table").dblclick(function(){
+			//	$(this).hide();
+			//});				
+			//$("table#xHomework").sticky();		
+			//OR
+			//$("#myDiv").sticky();
+			//OR
+			//$("#myHeader").sticky({bindWith: '#myContent'});
+		});
+	</script>
+  <!------------------------------------------------------------------------>
+</head>
+<body onload="kStart()">
+ <h1 id="testid"> มคอ 3 รายละเอียดของรายวิชา (Course Specification)</h1>
+  	<div style="float:right">
+	<textarea id="inputTextToSave" style="display:none"></textarea>
+	<input type="button" value="Export" onclick="fExportTxtFile()">
+	<input type="button" value="Import" onclick="loadFileShow()">
+	<input type="file" id="fileToLoad" onchange="loadFileAsText()" style="display:none"> 	
+	<input type="button" id="bUpdatefromFile" value="Update" onclick="loadFileAsText()" style="display:none"> 
+	<input type="text" id="textFileNameToSaveAs" value="type file name">
+	</div>	
+	<form>
+  	<nav id="nav01"></nav>
+	<fieldset id="mChap11">
+		<h3>มาตรฐานผลการเรียนรู้ ของหลักสูตร  เมื่อเทียบกับของรายวิชา 
+		<span style="float:right">
+		<input type="button" value="นำเข้าตาราง Learning Outcome" onclick="learningOutcomeToggle()">
+		<input type="button" id="bEditxLearningOutcome" value="Edit" onclick="EditxLearningOutcome()">
+		</span></h3>	
+			<table id="xLearningOutcome"></table>
+			<textarea id="tLearningOutcome" style="display:none" rows=20 cols=50 placeholder="คัดลอก cell จาก spread sheet จำนวน 3 columns ได้แก่ \n(1) หัวข้อ (2) คำอธิบาย และ (3) ความรับผิดชอบ \n(ใส่ 2  สำหรับความรับผิดชอบหลัก  / 1  สำหรับความรับผิดชอบรอง / 0 ไม่มี และปล่อยว่างไว้สำหรับหัวข้อหลัก)"></textarea><br>
+			<input type="button" id="bLearningOutcome" value="Submit to Create Table" onclick='TXTtoOBJxLearningOutcome()' style="display:none">
+	</fieldset>
+	<fieldset id="mChap12">
+		<h3>สัดส่วนคะแนน
+		<span>
+		<input type="button" id="bEditxCategory" value="Edit" onclick="EditxCategory()">
+		</span></h3>		
+			<table id="xCategory" style="width:50%"></table>
+	</fieldset>		
+	<fieldset id="mChap13">
+		<h3>ความสัมพันธ์ระหว่างชิ้นงานและผลการเรียนรู้แต่ละด้าน
+		<span>
+		<input type="button" id="bTogglexHomework" value="Collapse" onclick="TogglexHomework()">
+		<input type="button" id="bEditxHomework" value="Edit" onclick="EditxHomework()">
+		</span>
+		<span style="float:right">ร้อยละของคะแนนแต่ละข้อ-สู่ผลการเรียนรู้แต่ละด้าน</span></h3>		
+			<table id="xHomework"></table>
+	</fieldset>		
+	<fieldset id="mChap31">
+		<h3>ชื่อสถาบันอุดมศึกษา &nbsp;<input type="text" id="tUniversityName" size=60 ></h3>
+		<h3>วิทยาเขต/คณะ/ภาควิชา &nbsp;<input type="text" id="tFacultyName" size=60 ></h3>
+		<h2>หมวดที่ 1 ข้อมูลทั่วไป</h2>
+		<h3>1. รหัสและชื่อรายวิชา</h3>
+			<p>ภาษาไทย &nbsp; <input type="text" size=60 id="tSubjectTh"></p> 		
+			<p>ภาษาอังกฤษ &nbsp; <input type="text" size=60 id="tSubjectEn"></p>		
+		<h3>2. จำนวนหน่วยกิต</h3>
+			<p><input type="text" id="tCredit"></p> 
+		<h3>3. รายวิชาบังคับก่อน</h3>
+			<p><input type="text" id="tPreRequisite"></p> 
+		<h3>4. หลักสูตร</h3>
+			<p><input type="text"  size=60 id="tCurriculum"></p> 
+		<h3>5. ประเภทรายวิชา</h3>
+			<p><select id="sSubjectType">
+				<option>วิชาพื้นฐานทางวิศวกรรม</option>
+				<option>วิชาบังคับเฉพาะสาขา</option>
+				<option>วิชาเลือกเฉพาะสาขา</option>
+				<option>วิชาบังคับไม่นับหน่วยกิต</option>
+				</select>
+				<input type="button" id="bSubjectTypeOpen" value="อื่นๆ (ระบุ)" onclick="fSubjectTypeOpen()">
+				<input type="text" id="tSubjectTypeAdd" value="-ระบุ-" onmousedown="this.value=''" style="display:none" >
+				<input type="button" id="bSubjectTypeAdd" value="เพิ่ม" onclick="fSubjectTypeAdd()" style="display:none">
+				<input type="button" id="bSubjectTypeDelete" value="ลบ" onclick="fSubjectTypeDelete()" style="display:none">
+				<input type="button" id="bSubjectTypeClose" value="ยืนยัน" onclick="fSubjectTypeClose()" style="display:none">
+			</p>
+		<h3>6. อาจารย์ที่รับผิดชอบรายวิชาและอาจารย์ผู้สอน</h3>	
+			<h4>6.1 อาจารย์ผู้รับผิดชอบ</h4>	
+			<p><textarea id="tTeacherA" onkeyup="autoGrow(this)" onmouseup="autoGrow(this)"></textarea></p>
+			<h4>6.2 อาจารย์ผู้สอน</h4>
+			<p><textarea id="tTeacherB" onkeyup="autoGrow(this)" onmouseup="autoGrow(this)"></textarea></p>
+		<h3>7. ภาคการศึกษา</h3>	
+			<p><input type="text" id="tSemester"  size=40></p>
+		<h3>8. นิสิตชั้นปีที่</h3>	
+			<p><input type="text" id="tStudentYear"  size=4></p>
+		<h3>9. สถานที่เรียน</h3>	
+			<p><textarea id="tStudyPlace" onkeyup="autoGrow(this)" onmouseup="autoGrow(this)">
+			</textarea></p>
+		<h3>10. วันที่จัดทำหรือปรับปรุงรายละเอียดของรายวิชา</h3>	
+			<p><input type="text"  size=20 id="tM3CreateDate"></p>
+	</fieldset>	
+	<fieldset id="mChap32">
+		<h2>หมวดที่ 2 จุดมุ่งหมายและวัตถุประสงค์ </h2>
+		<h3>1. จุดมุ่งหมายของรายวิชา</h3>
+			<p><textarea id="tTarget" class="objective" onkeyup="autoGrow(this)" onmouseup="autoGrow(this)"></textarea></p>
+		<h3>2. วัตถุประสงค์ในการพัฒนา/ปรับปรุงรายวิชา</h3>
+			<p>		
+			<input type="checkbox" id="tObjective1" name="cObjective"><br>
+			<input type="checkbox" id="tObjective2" name="cObjective"><br>
+			<input type="checkbox" id="tObjective3" name="cObjective"><br>
+			<input type="checkbox" id="tObjective4" name="cObjective">&nbsp;<input type="text" id="tOtherObjective" value="อื่นๆ (ระบุ)">
+			</p>
+	</fieldset>
+	<fieldset id="mChap33">
+	<h2>หมวดที่ 3 ลักษณะและการดำเนินการ</h2>
+		<h3>1. คำอธิบายรายวิชา</h3>
+			<p><textarea class="objective" id="tCourseDescription" onkeyup="autoGrow(this)" onmouseup="autoGrow(this)"></textarea></p>
+		<h3>2. จำนวนชั่วโมงที่ใช้ต่อภาคการศึกษา</h3>
+			<p><input type="text"  size=20 id="tM3CreateDate" </p>
+	</fieldset>
+	<fieldset id="mChap34">
+	<h2>หมวดที่ 4 การพัฒนาผลการเรียนรู้ของนิสิต</h2>
+		<h3>1. คำอธิบายรายวิชา</h3>
+			<p><textarea class="objective" id="xxxx" onkeyup="autoGrow(this)" onmouseup="autoGrow(this)"></textarea></p>
+		<h3>2. จำนวนชั่วโมงที่ใช้ต่อภาคการศึกษา</h3>
+			<p><input type="text"  size=20 id="xxxxx" value="45 ชั่วโมง (ปฏิบัติการ)"></p>
+			<p>
+			<textarea id="kitty" style='width: 20px; background: #aae; padding: 0; margin: 0; border: 0; overflow: hidden' rows=6></textarea>
+			<textarea id="hello" style='padding: 0; margin: 0; border: 0;' rows=6></textarea>
+			<input type="button" value="test" onclick='autoRowsFit("hello","kitty")'>
+			</p>
+	</fieldset>
+	<fieldset id="mChapxx" style="display:none">
+		<div id="ktable">004</div>
+		<textarea id="psmtext" rows="24" cols="72">CCCCCCC</textarea><br>
+		<input onclick="clip(0)" value="Make Table" type="button">
+		<input onclick="kback()" value="Back" type="button">
+		<input onclick="kclear()" value="Clear" type="button">
+		<input onclick="clip(1)" value="Edit Table" type="button">
+		<input onclick="kChange()" value="Update" type="button">
+	</fieldset>
+	<input type="file" id="myFile" multiple size="50" onchange="myFunction()">
+	</form>
+
+  <br><br><br>
+  <footer id="foot01"></footer>
+  <script src="scr/script.js"></script>
+  
+  
+  <fieldset style="display:none">
+  		<div id="tableLO"></div>
+		<textarea id="psmtext" rows="24" cols="72">copy your data from spread sheet and paste here</textarea><br>
+		<input onclick="clip(0)" value="Make Table" type="button">
+		<input onclick="kStart()" value="Start" type="button">
+		<input onclick="kclear()" value="Clear" type="button">
+		<input onclick="clip(1)" value="Edit Table" type="button">
+		<input onclick="kChange()" value="Update" type="button">
+	</fieldset>
+    
+</body></html>
